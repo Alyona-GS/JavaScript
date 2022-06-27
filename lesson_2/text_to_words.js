@@ -1,5 +1,5 @@
 function isCapitalized(word) {
-  return /[A-Z]/.test(word.charAt(0))
+  return /[A-ZА-ЯЁ]/.test(word.charAt(0))
 }
 
 const wordObject = function (word) {
@@ -11,7 +11,7 @@ const wordObject = function (word) {
 };
 
 function textToWords (text) {
-  let words = text.replace(/[.,?!()]/g, " ")
+  let words = text.replace(/[.,?!()"]/g, " ")
                   .trim()
                   .split(/[\s]+/);
 
