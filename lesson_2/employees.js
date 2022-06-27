@@ -22,20 +22,8 @@ const employees = [
     }
 ]
 
-const reduceCallback = function(acc, item) {
-    return acc + Number(item.salary)
-}
-
-const sortCallBack = function(a, b) {
-    return a.salary - b.salary
-}
-
-const filterCallBack = function(emp) {
-    return emp.salary > 4500 && emp.age > 25
-}
-
-const averageSalary = employees.reduce(reduceCallback, 0)/employees.length;
-const sortedBySalary = employees.sort(sortCallBack);
-const filterBySalaryAge = employees.filter(filterCallBack);
+const averageSalary = employees.reduce((acc, item) => acc + Number(item.salary), 0)/employees.length;
+const sortedBySalary = employees.sort((a, b) => a.salary - b.salary);
+const filterBySalaryAge = employees.filter(emp => emp.salary > 4500 && emp.age > 25);
 
 console.log(averageSalary, filterBySalaryAge);
