@@ -5,18 +5,19 @@ var human = Object.create({}, {
       return name
     },
     get: function() {
-      return this.firstName + ' ' + this.lastName
+      return [this.firstName, this.lastName].join(' ').trim()
     }
   },
   dateOfBirth: {
     set: function(date){
+      let [day, month, year] = date.split(/[.:/-]/);
+      date = [month, day, year].join('.');
+
       this.birthday = new Date(date);
-      this.age = new Date().getFullYear() - this.birthday.getFullYear()
+      this.age = new Date().getFullYear() - year
     },
     get: function() {
-      return [this.birthday.getDate(),
-              this.birthday.getMonth() + 1,
-              this.birthday.getFullYear()].join('.')
+      return new Intl.DateTimeFormat().format(this.birthday)
     }
   }
 });
