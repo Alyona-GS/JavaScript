@@ -1,5 +1,5 @@
-const MoneyBox = function() {
-  let coins = 0;
+function MoneyBox() {
+  var coins = 0;
 
   this.addCoin = function() {
     coins++
