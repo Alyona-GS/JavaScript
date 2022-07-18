@@ -1,6 +1,8 @@
 var Rectangle = function() {
   this.set = function(...sides) {
-    this.sides = sides;
+    sides = [...new Set(sides)];
+
+    sides.length == 2 ? this.sides = sides : console.log("This is not a rectangle")
   }
 
   this.perimeter = function() {
@@ -12,9 +14,12 @@ var Rectangle = function() {
   }
 }
 
-var Square = function() {};
-Square.prototype = new Rectangle();
+var Square = function() {
+  this.set = function(...sides) {
+    sides = [...new Set(sides)];
 
-Square.prototype.set = function(side) {
-  this.sides = [side, side]
-}
+    sides.length == 1 ? this.sides = sides.concat(sides) : console.log("This is not a square")
+  }
+};
+
+Square.prototype = new Rectangle();
