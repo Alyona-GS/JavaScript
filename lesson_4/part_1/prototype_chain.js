@@ -1,26 +1,26 @@
-function Person(personData) {
-  this.name        = personData[0];
-  this.lastName    = personData[1];
-  this.location    = personData[2];
-  this.phoneNumber = personData[3];
+function Person(data) {
+  this.name        = data['name'];
+  this.lastName    = data['lastName'];
+  this.location    = data['location'];
+  this.phoneNumber = data['phoneNumber'];
 
   this.eat        = function() {};
   this.sleep      = function() {};
   this.callFriend = function() {};
 }
 
-function Employee(personData, employeeData) {
-  Person.call(this, personData);
+function Employee(data) {
+  Object.setPrototypeOf(this, new Person(data));
 
-  this.position       = employeeData[0];
-  this.startDate      = employeeData[1];
-  this.baseSalary     = employeeData[2];
-  this.salaryCurrency = employeeData[3];
-  this.department     = employeeData[4];
+  this.position       = data['position'];
+  this.startDate      = data['startDate'];
+  this.baseSalary     = data['baseSalary'];
+  this.salaryCurrency = data['salaryCurrency'];
+  this.department     = data['department'];
 }
 
-function Current(personData, employeeData) {
-  Employee.call(this, personData, employeeData);
+function Current(data) {
+  Object.setPrototypeOf(this, new Employee(data));
 
   this.writeReport     = function() {};
   this.organizeMeeting = function() {};
@@ -28,13 +28,8 @@ function Current(personData, employeeData) {
   this.startVacation   = function() {};
 };
 
-function Retired(personData, employeeData, endDate) {
-  Employee.call(this, personData, employeeData);
-
+function Retired({endDate, ...data} = {}) {
+  Object.setPrototypeOf(this, new Employee(data));
+  
   this.endDate = endDate;
 };
-
-Employee.prototype = Object.create(Person.prototype);
-
-Current.prototype = Object.create(Employee.prototype);
-Retired.prototype = Object.create(Employee.prototype);
