@@ -5,61 +5,47 @@ function Ship(color) {
 }
 
 function MotorShip(power, material, color = "default") {
-  Ship.call(this, color);
+  Object.setPrototypeOf(Object.getPrototypeOf(this), new Ship(color));
 
   this.power = power;
   this.material = material;
 }
 
 function SailingShip(masts, sails_area, color = "default") {
-  Ship.call(this, color);
+  Object.setPrototypeOf(Object.getPrototypeOf(this), new Ship(color));
 
   this.masts = masts;
   this.sails_area = sails_area;
 }
 
 function ShipYard() {
-  this.build = function(...params) {
-    return this instanceof MotorShipYard ? new MotorShip(...params) : new SailingShip(...params)
-  }
+  this.build = function(...params) { return new this.shipConstructor(...params) };
 
   this.repair = function(ship) {
     if (!ship.isBroken) { return console.log("Ship is not broken") };
 
-    if (this instanceof MotorShipYard && ship instanceof MotorShip ||
-        this instanceof SailingShipYard && ship instanceof SailingShip) {
-
-      ship.isBroken = false
-
-    } else {
-      console.log("Type of ship is incorrect");
-    }
+    ship instanceof this.shipConstructor ? ship.isBroken = false : console.log("Type of ship is incorrect");
   }
 
-  this.repaint = function(ship, color) {
-    ship.color = color;
-  };
+  this.repaint = function(ship, color) { ship.color = color };
 
   this.exchange = function(ship, ...params) {
     if (!ship.isOld) { return console.log("Ship is not old") };
+    if (!(ship instanceof this.shipConstructor)) { return console.log("Type of ship is incorrect") };
 
-    new_ship = ship instanceof MotorShip ? new MotorShip(...params) : new SailingShip(...params);
-
-    Object.keys(ship).forEach(function(key) { delete ship[key] });
-    return new_ship
+    Object.assign(ship, new this.shipConstructor(...params));
+    ship.isOld = false;
   };
 }
 
 function MotorShipYard(ship) {
-  ShipYard.call(this, ship)
+  Object.setPrototypeOf(Object.getPrototypeOf(this), new ShipYard());
+
+  this.shipConstructor = MotorShip;
 }
 
 function SailingShipYard(ship) {
-  ShipYard.call(this, ship)
+  Object.setPrototypeOf(Object.getPrototypeOf(this), new ShipYard());
+
+  this.shipConstructor = SailingShip;
 }
-
-MotorShipYard.prototype   = Object.create(ShipYard.prototype);
-SailingShipYard.prototype = Object.create(ShipYard.prototype);
-
-MotorShip.prototype   = Object.create(Ship.prototype);
-SailingShip.prototype = Object.create(Ship.prototype);
