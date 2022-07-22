@@ -10,7 +10,7 @@ function Person(data) {
 }
 
 function Employee(data) {
-  Object.setPrototypeOf(this, new Person(data));
+  Object.setPrototypeOf(Object.getPrototypeOf(this), new Person(data));
 
   this.position       = data['position'];
   this.startDate      = data['startDate'];
@@ -20,7 +20,7 @@ function Employee(data) {
 }
 
 function Current(data) {
-  Object.setPrototypeOf(this, new Employee(data));
+  Object.setPrototypeOf(Object.getPrototypeOf(this), new Employee(data));
 
   this.writeReport     = function() {};
   this.organizeMeeting = function() {};
@@ -29,7 +29,7 @@ function Current(data) {
 };
 
 function Retired({endDate, ...data} = {}) {
-  Object.setPrototypeOf(this, new Employee(data));
+  Object.setPrototypeOf(Object.getPrototypeOf(this), new Employee(data));
   
   this.endDate = endDate;
 };
