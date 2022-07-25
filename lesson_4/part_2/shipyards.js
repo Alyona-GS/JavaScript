@@ -33,8 +33,8 @@ function ShipYard() {
     if (!ship.isOld) { return console.log("Ship is not old") };
     if (!(ship instanceof this.shipConstructor)) { return console.log("Type of ship is incorrect") };
 
+    Object.keys(ship).forEach(key => delete ship[key]);
     Object.assign(ship, new this.shipConstructor(...params));
-    Object.keys(ship.__proto__.__proto__).forEach(function(key) { console.log(key); delete ship[key] });
   };
 }
 
