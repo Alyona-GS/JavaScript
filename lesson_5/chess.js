@@ -44,21 +44,10 @@ class Chessboard {
 class Game {
   constructor() {
     this.state = "In game";
-    this.moves = 0;
     this.players_move = 'white';
-    this.players_move_history = {};
+    this.players_move_history = [];
     this.dead_pieces = {};
   }
+
+  get moves() { return this.players_move_history.length };
 }
-
-// function chessboard_coord() {
-//   letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-//   positions = [...Array(8)].map(e => Array(8));
-
-//   for (let i = 0; i < positions.length; i++) {
-//     for (let j = 0; j < positions.length; j++) {
-//       positions[i][j] = letters[i].concat(j + 1);
-//     }
-//   }
-//   return positions
-// }
