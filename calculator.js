@@ -1,10 +1,8 @@
 const display = document.querySelector(".display");
 const buttonsBlock = document.querySelector(".btn-group");
 
-var input,
-    counter = 0,
+var counter = 0,
     typesetting_mode = false,
-    op_hist = [],
     operands = [null, null],
     sign = null,
     operations = { "+": (a, b) => a + b,
@@ -12,11 +10,17 @@ var input,
                    "*": (a, b) => a * b,
                    "/": (a, b) => a / b };
 
-const addOperation = (input) => {
+const addOperation = () => {
   counter++;
   switch (counter) {
     case 1:
-      sign = display.innerHTML;
+      input = display.innerHTML;
+      if (input == "C") {
+        counter = 0;
+        throw 'C is a special function';
+      } else {
+        sign = display.innerHTML;
+      }
       display.innerHTML = "";
       alert (`Your sign: ${sign}\r\nInput the formula like: a * b`);
       break;
@@ -50,13 +54,6 @@ const performInputOperation = keyValue => {
     display.innerHTML = "";
   }
 
-  if (Number.isInteger(+keyValue)) {
-    operands[1] = operands[1] === null ? keyValue : operands[1] + keyValue;
-    display.textContent = operands[1];
-
-    console.log("integer", sign, operands);
-  }
-
   switch (keyValue) {
     case "C":
       operands = [null, null];
@@ -74,22 +71,26 @@ const performInputOperation = keyValue => {
       break;
     case "=":
     case "Enter":
-      console.log("=/enter",sign, operands);
       performAction(sign, operands);
+      break;
+    default:
+      if (Number.isInteger(+keyValue)) {
+        operands[1] = operands[1] === null ? keyValue : operands[1] + keyValue;
+        display.textContent = operands[1];
+      }
       break;
   }
 }
 
 const typesetting = keyValue => {
+  if (keyValue == "C" && event.type == "click") { display.innerHTML = "" };
+
   switch (keyValue) {
-    case "C":
-      display.textContent = "";
-      break;
     case "Backspace":
       display.textContent = display.textContent.slice(0, -1);
       break;
     case "Enter":
-      addOperation(input);
+      addOperation();
       break;
     default:
       if (keyValue.length == 1) {
@@ -101,12 +102,10 @@ const typesetting = keyValue => {
 
 document.addEventListener("keyup", event => {
   const keyValue = event.key;
-  console.log("keyup",keyValue,sign, operands);
   typesetting_mode ? typesetting(keyValue) : performInputOperation(keyValue);
 });
 
 buttonsBlock.addEventListener("click", event => {
   const buttonValue = event.target.textContent;
-  console.log("click", buttonValue,sign, operands);
   typesetting_mode ? typesetting(buttonValue) : performInputOperation(buttonValue);
 });
